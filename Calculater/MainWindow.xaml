@@ -1,0 +1,228 @@
+﻿<Window x:Class="Calculater.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Calculater"
+        mc:Ignorable="d"
+        Title="Calculator" Height="500" Width="480.143">
+    <Window.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="RoundedButton" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="10" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#f8dbf4"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#e266d0"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#f6a1e9"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid x:Name="MainRoot" Background="#FFFFFF">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition x:Name="menuColumn" Width="0"/>
+        </Grid.ColumnDefinitions>
+        <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" 
+                   Margin="4" Width="415" Height="58" 
+                   HorizontalAlignment="Right" Fill="#FDCAF5" 
+                   RadiusX="10" RadiusY="10" />
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#DE1EC1" RadiusX="20" RadiusY="20" Width="25" Height="25" Stroke="#A5138F" StrokeThickness="2" Margin="80,6,13.286,47.286"/>
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#DE1EC1" RadiusX="20" RadiusY="20" Width="25" Height="25" Stroke="#A5138F" StrokeThickness="2" Margin="80,25,13.286,28.286"/>
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#DE1EC1" RadiusX="20" RadiusY="20" Width="25" Height="25" Stroke="#A5138F" StrokeThickness="2" Margin="91,16,2.286,37.286"/>
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#DE1EC1" RadiusX="20" RadiusY="20" Width="25" Height="25" Stroke="#A5138F" StrokeThickness="2" Margin="68,16,25.286,37.286"/>
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#FFCB3D" RadiusX="20" RadiusY="20" Width="17" Height="17" Stroke="#FF953D" StrokeThickness="2" Margin="84,20,17.286,41.286"/>
+        <TextBlock x:Name="textlabel" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" 
+                   VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="25" Margin="0,0,50,0" />
+        <Button x:Name="menuButton" Grid.Row="0" Grid.Column="0" Background="#F6A1E9" Width="40" Height="40" 
+                HorizontalAlignment="Left" VerticalAlignment="Top"
+                Style="{DynamicResource RoundedButton}" Margin="3">≡</Button>
+        <Button Grid.Row="1" Grid.Column="0" Background="#F6A1E9" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">CE</Button>
+        <Button Grid.Row="1" Grid.Column="1" Background="#F6A1E9" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">C</Button>
+        <Button Grid.Row="1" Grid.Column="2" Background="#F6A1E9" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">⌫</Button>
+        <Button Grid.Row="1" Grid.Column="3" Background="#F6A1E9" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">×</Button>
+        <Button Grid.Row="1" Grid.Column="4" Background="#F6A1E9" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">π</Button>
+        <Button Grid.Row="2" Grid.Column="3" Background="#F6A1E9" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">÷</Button>
+        <Button Grid.Row="2" Grid.Column="4" Background="#F6A1E9" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">e</Button>
+        <Button Grid.Row="3" Grid.Column="3" Background="#F6A1E9" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">-</Button>
+        <Button Grid.Row="3" Grid.Column="4" Background="#F6A1E9" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">√</Button>
+        <Button Grid.Row="4" Grid.Column="3" Background="#F6A1E9" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">+</Button>
+        <Button Grid.Row="4" Grid.Column="4" Background="#F6A1E9" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">n²</Button>
+        <Button Grid.Row="5" Grid.Column="4" Background="#F6A1E9" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">ln</Button>
+        <Button Grid.Row="5" Grid.Column="3" Background="#E266D0" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">=</Button>
+
+        <Button Grid.Row="2" Grid.Column="0" Background="#FDCAF5" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">7</Button>
+        <Button Grid.Row="2" Grid.Column="1" Background="#FDCAF5" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">8</Button>
+        <Button Grid.Row="2" Grid.Column="2" Background="#FDCAF5" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">9</Button>
+
+        <Button Grid.Row="3" Grid.Column="0" Background="#FDCAF5" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">4</Button>
+        <Button Grid.Row="3" Grid.Column="1" Background="#FDCAF5" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">5</Button>
+        <Button Grid.Row="3" Grid.Column="2" Background="#FDCAF5" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">6</Button>
+
+        <Button Grid.Row="4" Grid.Column="0" Background="#FDCAF5" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">1</Button>
+        <Button Grid.Row="4" Grid.Column="1" Background="#FDCAF5" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">2</Button>
+        <Button Grid.Row="4" Grid.Column="2" Background="#FDCAF5" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">3</Button>
+
+        <Button Grid.Row="5" Grid.Column="0" Background="#FDCAF5" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">00</Button>
+        <Button Grid.Row="5" Grid.Column="1" Background="#FDCAF5" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">0</Button>
+        <Button Grid.Row="5" Grid.Column="2" Background="#FDCAF5" FontSize="20" Style="{DynamicResource RoundedButton}" Margin="2">,</Button>
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#DE1EC1" RadiusX="20" RadiusY="20" Stroke="#A5138F" StrokeThickness="2" Margin="46,1,58.286,63.286" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="26.714"/>
+                    <TranslateTransform X="2.697" Y="0.64"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#DE1EC1" RadiusX="20" RadiusY="20" Stroke="#A5138F" StrokeThickness="2" Margin="46,12,58.286,52.286" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="26.714"/>
+                    <TranslateTransform X="-2.697" Y="-0.64"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#DE1EC1" RadiusX="20" RadiusY="20" Stroke="#A5138F" StrokeThickness="2" Margin="53,6,52.286,58.286" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="26.714"/>
+                    <TranslateTransform X="-0.347" Y="3.174"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#DE1EC1" RadiusX="20" RadiusY="20" Stroke="#A5138F" StrokeThickness="2" Margin="40,6,64.286,57.286" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="26.714"/>
+                    <TranslateTransform X="1.117" Y="-2.991"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#FFCB3D" RadiusX="20" RadiusY="20" Stroke="#FF953D" StrokeThickness="2" Margin="48,9,60.286,59.286" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="26.714"/>
+                    <TranslateTransform X="0.287" Y="-0.068"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#DE1EC1" RadiusX="20" RadiusY="20" Stroke="#A5138F" StrokeThickness="2" Margin="99,52,5.286,13.286" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="50.631"/>
+                    <TranslateTransform X="4.597" Y="2.177"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#DE1EC1" RadiusX="20" RadiusY="20" Stroke="#A5138F" StrokeThickness="2" Margin="98,62,6.286,1.286" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="50.631"/>
+                    <TranslateTransform X="-4.124" Y="-2.106"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#DE1EC1" RadiusX="20" RadiusY="20" Stroke="#A5138F" StrokeThickness="2" Margin="105,56,0.286,8.286" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="50.631"/>
+                    <TranslateTransform X="-1.519" Y="5.514"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#DE1EC1" RadiusX="20" RadiusY="20" Stroke="#A5138F" StrokeThickness="2" Margin="92,57,12.286,7.286" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="50.631"/>
+                    <TranslateTransform X="2.892" Y="-4.583"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle Grid.Row="0" Grid.Column="3" Fill="#FFCB3D" RadiusX="20" RadiusY="20" Stroke="#FF953D" StrokeThickness="2" Margin="100,59,8.286,9.286" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="50.631"/>
+                    <TranslateTransform X="0.549" Y="0.209"/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+
+
+    </Grid>
+</Window>
