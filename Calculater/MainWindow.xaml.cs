@@ -12,7 +12,7 @@ namespace Calculater
         private bool isMenuOpen = false;
         private Stack<string> historyStack = new Stack<string>();
         private Stack<string> redoStack = new Stack<string>();
-        private Dictionary<string, ICommandAction> commands = new Dictionary<string, ICommandAction>();
+        private Dictionary<string, CommandBase> commands = new Dictionary<string, CommandBase>();
 
         public MainWindow()
         {
@@ -73,14 +73,14 @@ namespace Calculater
         public void SetText(string value) => textlabel.Text = value;
     }
 
-    public interface ICommandAction
+    public abstract class CommandBase
     {
-        void Execute(MainWindow window, string parameter);
+        public abstract void Execute(MainWindow window, string parameter);
     }
 
-    public class ClearCommand : ICommandAction
+    public class ClearCommand : CommandBase
     {
-        public void Execute(MainWindow window, string parameter)
+        public override void Execute(MainWindow window, string parameter)
         {
             window.SetText("");
             window.ClearHistory();
@@ -88,33 +88,31 @@ namespace Calculater
         }
     }
 
-    public class UndoCommand : ICommandAction
+    public class UndoCommand : CommandBase
     {
-        public void Execute(MainWindow window, string parameter)
+        public override void Execute(MainWindow window, string parameter)
         {
             window.PushToRedo(window.GetText());
             window.SetText(window.PopFromHistory());
         }
     }
 
-    public class RedoCommand : ICommandAction
+    public class RedoCommand : CommandBase
     {
-        public void Execute(MainWindow window, string parameter)
+        public override void Execute(MainWindow window, string parameter)
         {
             var previousState = window.PopFromRedo();
-
             if (!string.IsNullOrEmpty(previousState))
             {
-                window.PushToHistory(window.GetText()); 
-                window.SetText(previousState); 
+                window.PushToHistory(window.GetText());
+                window.SetText(previousState);
             }
         }
     }
 
-
-    public class BackspaceCommand : ICommandAction
+    public class BackspaceCommand : CommandBase
     {
-        public void Execute(MainWindow window, string parameter)
+        public override void Execute(MainWindow window, string parameter)
         {
             var current = window.GetText();
             if (!string.IsNullOrEmpty(current))
@@ -125,15 +123,15 @@ namespace Calculater
         }
     }
 
-    public class SquareCommand : ICommandAction
+    public class SquareCommand : CommandBase
     {
-        public void Execute(MainWindow window, string parameter)
+        public override void Execute(MainWindow window, string parameter)
         {
             string current = window.GetText();
             window.PushToHistory(current);
-            if (double.TryParse(window.GetText(), out double number) && number >= 0)
+            if (double.TryParse(current, out double number) && number >= 0)
             {
-                window.PushToRedo(window.GetText());
+                window.PushToRedo(current);
                 window.SetText(Math.Pow(number, 2).ToString());
             }
             else
@@ -143,61 +141,61 @@ namespace Calculater
         }
     }
 
-    public class PiCommand : ICommandAction
+    public class PiCommand : CommandBase
     {
-        public void Execute(MainWindow window, string parameter)
+        public override void Execute(MainWindow window, string parameter)
         {
             string current = window.GetText();
             window.PushToHistory(current);
-            if (double.TryParse(window.GetText(), out double number))
+            if (double.TryParse(current, out double number))
                 window.SetText((number * Math.PI).ToString());
             else
-                window.SetText(window.GetText() + Math.PI.ToString());
+                window.SetText(current + Math.PI.ToString());
         }
     }
 
-    public class ECommand : ICommandAction
+    public class ECommand : CommandBase
     {
-        public void Execute(MainWindow window, string parameter)
+        public override void Execute(MainWindow window, string parameter)
         {
             string current = window.GetText();
             window.PushToHistory(current);
-            if (double.TryParse(window.GetText(), out double number))
+            if (double.TryParse(current, out double number))
                 window.SetText((number * Math.E).ToString());
             else
-                window.SetText(window.GetText() + Math.E.ToString());
+                window.SetText(current + Math.E.ToString());
         }
     }
 
-    public class LnCommand : ICommandAction
+    public class LnCommand : CommandBase
     {
-        public void Execute(MainWindow window, string parameter)
+        public override void Execute(MainWindow window, string parameter)
         {
             string current = window.GetText();
             window.PushToHistory(current);
-            if (double.TryParse(window.GetText(), out double number) && number > 0)
+            if (double.TryParse(current, out double number) && number > 0)
                 window.SetText(Math.Log(number).ToString());
             else
                 window.SetText("Error");
         }
     }
 
-    public class SqrtCommand : ICommandAction
+    public class SqrtCommand : CommandBase
     {
-        public void Execute(MainWindow window, string parameter)
+        public override void Execute(MainWindow window, string parameter)
         {
             string current = window.GetText();
             window.PushToHistory(current);
-            if (double.TryParse(window.GetText(), out double number) && number >= 0)
+            if (double.TryParse(current, out double number) && number >= 0)
                 window.SetText(Math.Sqrt(number).ToString());
             else
                 window.SetText("Error");
         }
     }
 
-    public class EvaluateCommand : ICommandAction
+    public class EvaluateCommand : CommandBase
     {
-        public void Execute(MainWindow window, string parameter)
+        public override void Execute(MainWindow window, string parameter)
         {
             try
             {
@@ -214,13 +212,9 @@ namespace Calculater
                 window.ClearRedo();
 
                 if (result.Length > 27)
-                {
                     window.SetText(Convert.ToDouble(result).ToString("E"));
-                }
                 else
-                {
                     window.SetText(result);
-                }
             }
             catch
             {
@@ -229,16 +223,14 @@ namespace Calculater
         }
     }
 
-    public class AppendTextCommand : ICommandAction
+    public class AppendTextCommand : CommandBase
     {
-        public void Execute(MainWindow window, string parameter)
+        public override void Execute(MainWindow window, string parameter)
         {
             string current = window.GetText();
-
             window.PushToHistory(current);
 
             string[] operators = { "+", "-", "×", "÷" };
-
             string lastNumber = current.Split(operators, StringSplitOptions.RemoveEmptyEntries).LastOrDefault() ?? "";
 
             if (parameter == "00" && current != "" && current != "-" && !current.EndsWith("00") && current != "00")
